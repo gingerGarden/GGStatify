@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "GGStatify"
+version = "0.0.0"
+description = "A statistics package for descriptive statistics, scaling, and generating random data distributions"
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+authors = [
+  { name="gingerGarden", email="gooopylim@gmail.com" },
+]
+dependencies = [
+    "numpy>=1.19.0",
+]
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Repository" = "https://github.com/gingerGarden/GGStatify"
