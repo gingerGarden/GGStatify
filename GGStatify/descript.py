@@ -2,10 +2,12 @@ from typing import List, Any, Tuple, Callable, Union
 
 import numpy as np
 import pandas as pd
+from tabulate import tabulate
+from .utils import show_markdown_df
 
 
 # 빈도표 출력
-def frequency_table(array:Union[np.ndarray, pd.Series], round:int=2, percent:bool=False)->pd.DataFrame:
+def frequency_table(array:Union[np.ndarray, pd.Series], round:int=2, percent:bool=False, markdown:bool=False)->pd.DataFrame:
     """
     주어진 배열 또는 시리즈의 빈도표를 생성하는 함수
 
@@ -13,6 +15,7 @@ def frequency_table(array:Union[np.ndarray, pd.Series], round:int=2, percent:boo
         array (np.ndarray): 빈도표를 만들 배열이나 시리즈
         round (int, optional): 비율 또는 퍼센트를 반올림할 소수점 자릿수. Defaults to 2.
         percent (bool, optional): 비율을 퍼센트로 변환하여 출력할지 여부. Defaults to False.
+        markdown (bool, optional): table을 markdown으로 보여줄지 여부. Defaults to False.
 
     Raises:
         ValueError: array가 비어있는 경우 예외가 발생합니다.
@@ -34,13 +37,17 @@ def frequency_table(array:Union[np.ndarray, pd.Series], round:int=2, percent:boo
         _ratio_to_percent_in_frequency_table(freq_df, round=round)
     else:
         freq_df['ratio'] = freq_df['ratio'].round(round)
+
+    if markdown: show_markdown_df(df=freq_df)       # markdown으로 출력할지 여부
+
     return freq_df
 
 
 # 교차표 출력
 def cross_table(
         df:pd.DataFrame, col1:str, col2:str, 
-        vertical:bool=True, percent:bool=True, ratio_style:int=0, round:int=2, margin_txt:str='total'
+        vertical:bool=True, percent:bool=True, ratio_style:int=0, round:int=2, margin_txt:str='total',
+        markdown:bool=False
     ):
     """
     교차표를 
@@ -57,9 +64,10 @@ def cross_table(
             - 2: 비율(퍼센트)만 교차표로 출력
         round (int, optional): 비율(퍼센트)의 반올림 자릿수. Defaults to 2.
         margin_txt (str, optional): 교차표의 margin(총합)의 컬럼과 인덱스 문자열. Defaults to 'total'.
+        markdown (bool, optional): table을 markdown으로 보여줄지 여부. Defaults to False.
 
     Returns:
-        _type_: _description_
+        pd.DataFrame: 교차표
     """
     _margin_check_for_cross_table(df, col1, col2, margin_txt)    # col1과 col2에 margin_txt가 있는지 확인
 
@@ -76,6 +84,9 @@ def cross_table(
         # 비율을 교차표로 내보낸다.
         if ratio_style == 2:
             cross_df = _convert_mat_to_cross_df_style_for_cross_table(cross_df, mat=ratio_mat)
+
+    if markdown: show_markdown_df(df=cross_df)       # markdown으로 출력할지 여부
+
     return cross_df
 
 
